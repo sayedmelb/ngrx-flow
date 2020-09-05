@@ -60,7 +60,7 @@ export function TimesheetReducer(state: TimesheetState = initialState, action: T
       case TimesheetActionTypes.UPDATE_ITEM_SUCCESS:
         return {
           ...state,
-          // list: [...state.list, action.payload],
+         //  list: [...state.list, action.payload],
           loading: false
         };
       case TimesheetActionTypes.UPDATE_ITEM_FAILURE:

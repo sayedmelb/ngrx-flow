@@ -9,4 +9,5 @@ export interface TimesheetItem {
   // timesheetRate: string;
   isSubmit: boolean;
   isEdit: boolean;
+  state: string;
 }

@@ -72,6 +72,12 @@ h2 {
 .list-row {
   cursor: pointer;
 }
+.selected-row {
+  background-color: palegreen!important;
+}
+.submitted-row {
+  background-color: #006266!important;
+}
 
 @media (max-width: 767px) {
   #wrapper {

@@ -30,10 +30,12 @@ export class AppComponent implements OnInit {
   timesheetItems: Observable<Array<TimesheetItem>>;
   loading$: Observable<Boolean>;
   error$: Observable<Error>
-  newTimesheetItem: TimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false }
+  newTimesheetItem: TimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false, state: 'Active'  }
 
   isNew = false;
   txtUpdate = 'Edit';
+  selectedItem = '';
+  itemforSubmit = {};
 
   constructor(private store: Store<AppState>, private fb: FormBuilder,) { }
 
@@ -64,7 +66,7 @@ export class AppComponent implements OnInit {
   }
   updateTimesheetItem(event, timesheet){
     
-      const updatedTimesheetItem = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, isSubmit: false, isEdit: false  };
+      const updatedTimesheetItem = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, isSubmit: false, isEdit: false, state: 'Active'   };
     
       this.store.dispatch(new UpdateItemAction(updatedTimesheetItem));
       timesheet.isEdit = false;
@@ -87,14 +89,14 @@ export class AppComponent implements OnInit {
 
     this.store.dispatch(new AddItemAction(this.newTimesheetItem));
 
-    this.newTimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false  };
+    this.newTimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false, state: 'Active'  };
     this.timesheetEntryForm.patchValue({ timesheetTitle: "" });
     this.timesheetEntryForm.patchValue({ timesheetType: "" });
     this.isNew=false;
 
   }
   updateItem(id: string, name: string) {
-    const updatedTimesheetItem = { id: id, name: name, timesheetTitle: '', timesheetType: '' , isSubmit: false, isEdit: false  };
+    const updatedTimesheetItem = { id: id, name: name, timesheetTitle: '', timesheetType: '' , isSubmit: false, isEdit: false, state: 'Active'   };
     
       this.store.dispatch(new UpdateItemAction(updatedTimesheetItem));
   
@@ -106,6 +108,30 @@ export class AppComponent implements OnInit {
   }
 
   editItem(id: string, name: string) {
-    this.newTimesheetItem = { id: id , name: name, timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false   };
+    this.newTimesheetItem = { id: id , name: name, timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false , state: 'Active'   };
+  }
+
+  onSelectedRow(timesheetItem) {
+    if(this.selectedItem === timesheetItem.id) {
+      this.selectedItem ='';
+
+    } else {
+      this.selectedItem = timesheetItem.id;
+      this.itemforSubmit = timesheetItem;
+    }
+    
+
+  }
+
+  onItemSubmit(timesheet){
+    if(this.selectedItem !=='') {
+      console.log('ready for submit');
+      const updatedTimesheetItemforSubmit = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, isSubmit: false, isEdit: false, state: 'Submitted'   };
+      this.store.dispatch(new UpdateItemAction(updatedTimesheetItemforSubmit));
+      timesheet.state = 'Submitted';
+      this.selectedItem = '';
+
+
+    }
   }
 }
