@@ -1,0 +1,35 @@
+<div id="wrapper">
+  <div [class.loading]="(loading$ | async)" id="timesheet-list" *ngIf="!(error$ | async); else error">
+    <div id="list">
+      <h2>
+        Timesheet List
+      </h2>
+
+        <ul *ngIf="(timesheetItems | async); else noItems">
+          <li *ngFor="let timesheet of timesheetItems | async" >
+            <span>{{timesheet.id}} -- </span>
+            <span>{{ timesheet.name }} | </span>
+            <span (click)="deleteItem(timesheet.id)">delete</span>
+            <span (click)="editItem(timesheet.id, timesheet.name)">Edit</span>
+          </li>
+        </ul>
+
+      <ng-template #noItems>
+        <ul>
+          <li style="max-width:250px;margin:0 auto;">No items found. Are you sure there's <em>nothing</em> you want?</li>
+        </ul>
+      </ng-template>
+    </div>
+
+    <form (ngSubmit)="addItem()">
+      <input type="text" [(ngModel)]="newTimesheetItem.name" placeholder="Item" name="itemName"/>
+      <button type="submit" >Add</button>
+      <button type="button" (click)="updateItem(newTimesheetItem.id, newTimesheetItem.name)" >Update</button>
+    </form>
+   
+  </div>
+</div>
+
+<ng-template #error>
+  <h2>{{(error$ | async)?.message}}</h2>
+</ng-template>
