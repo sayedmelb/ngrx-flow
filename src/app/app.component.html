@@ -4,15 +4,92 @@
       <h2>
         Timesheet List
       </h2>
+      <div class="pt-1 pb-1">
+        <button (click)="onNewClick($event)" class="btn btn-success">New Entry</button>&nbsp;
+        <button class="btn btn-success">Submit</button>
+      </div>
+      
+     
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> <label id="lblTimesheetTitle">Title</label></th>
+              <th> <label id="lblTimesheetType">Type</label></th>
+              <th> <label id="lblTimesheetType"></label></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container [formGroup]="timesheetEntryForm">
+            <tr *ngIf="isNew">
+              <td > <input
+                autocomplete="off"
+                class="card-input"
+                [ngClass]="{
+                  'card-input-border-error':
+                  timesheetTitle.invalid &&
+                    (timesheetTitle.dirty || timesheetTitle.touched)
+                }"
+                type="text"
+                size="10"
+                formControlName="timesheetTitle"
+                [title]="'Enter Title/ description'"
+                id="timesheet-title"
+                aria-describedby="lblTimesheetTitle"
+              /></td>
+              <td> <input
+                autocomplete="off"
+                class="card-input"
+                [ngClass]="{
+                  'card-input-border-error':
+                  timesheetType.invalid &&
+                    (timesheetType.dirty || timesheetType.touched)
+                }"
+                type="text"
+                size="10"
+                formControlName="timesheetType"
+                [title]="'Enter Title/ description'"
+                id="timesheet-type"
+                aria-describedby="lblTimesheetType"
+              /></td>
+              <td><button type="button" (click)="addItem()"  class="btn btn-primary btn-add">Add</button> <button type="button" (click)="onCancel($event)" class="btn btn-secondary" >Cancel</button></td>
 
-        <ul *ngIf="(timesheetItems | async); else noItems">
+            </tr>
+            </ng-container>
+            <ng-container *ngIf="(timesheetItems | async); else noItems" >
+              <ng-template ngFor let-timesheet [ngForOf]="timesheetItems | async">
+                <tr class="list-row ">
+                  <td> <input [ngClass]="{
+                    'card-input-readonly':
+                    !timesheet.isEdit 
+                  }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetTitle" />  </td>
+                  <td > <input [ngClass]="{
+                    'card-input-readonly':
+                    !timesheet.isEdit 
+                  }"  [readonly]="!timesheet.isEdit"  type="text" [(ngModel)]="timesheet.timesheetType" /> </td>
+                  <td>
+                    <button *ngIf="!timesheet.isEdit" type="button" (click)="editTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Edit</button> 
+                    <button *ngIf="timesheet.isEdit" type="button" (click)="updateTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Update</button>
+                 
+                    <button type="button" (click)="deleteItem(timesheet.id)" class="btn btn-warning" >Delete</button></td>
+
+                </tr>
+              </ng-template>
+            </ng-container>
+            
+       
+          </tbody>
+        </table>
+        
+
+      <!-- </ng-container> -->
+
+        <!-- <ul *ngIf="(timesheetItems | async); else noItems">
           <li *ngFor="let timesheet of timesheetItems | async" >
-            <span>{{timesheet.id}} -- </span>
             <span>{{ timesheet.name }} | </span>
             <span (click)="deleteItem(timesheet.id)">delete</span>
             <span (click)="editItem(timesheet.id, timesheet.name)">Edit</span>
           </li>
-        </ul>
+        </ul> -->
 
       <ng-template #noItems>
         <ul>
@@ -21,11 +98,11 @@
       </ng-template>
     </div>
 
-    <form (ngSubmit)="addItem()">
+    <!-- <form (ngSubmit)="addItem()">
       <input type="text" [(ngModel)]="newTimesheetItem.name" placeholder="Item" name="itemName"/>
       <button type="submit" >Add</button>
       <button type="button" (click)="updateItem(newTimesheetItem.id, newTimesheetItem.name)" >Update</button>
-    </form>
+    </form> -->
    
   </div>
 </div>

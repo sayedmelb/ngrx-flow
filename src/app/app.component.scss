@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: center;
   margin: 0px;
-  width: 400px;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -57,4 +57,24 @@ h2 {
   background: #10ac84;
   padding: 10px 0px;
   margin: 0px;
+}
+
+.card-input-border-error {
+  border-color: #b81237; //color(tertiary,red);// #b81237;
+}
+
+.btn-add {
+  margin-right: 0.5rem;
+}
+.card-input-readonly{
+  background-color: lightgray;
+}
+.list-row {
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  #wrapper {
+    width: 99%;
+  }
 }
