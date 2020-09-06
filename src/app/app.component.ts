@@ -18,6 +18,7 @@ import {
 } from "@angular/forms";
 
 import {getTimesheetEntryForm} from './forms/timesheet-entry.form'
+import { time } from 'console';
 
 @Component({
   selector: 'app-root',
@@ -30,12 +31,15 @@ export class AppComponent implements OnInit {
   timesheetItems: Observable<Array<TimesheetItem>>;
   loading$: Observable<Boolean>;
   error$: Observable<Error>
-  newTimesheetItem: TimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false, state: 'Active'  }
+  newTimesheetItem: TimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', timesheetRate: '', timesheetDayTotal: '', isSubmit: false, isEdit: false, state: 'Active'  }
 
   isNew = false;
   txtUpdate = 'Edit';
   selectedItem = '';
   itemforSubmit = {};
+  taskTypes = ['Telephone Call', 'Drafting document', 'Research'];
+  defaultType = 'Research';
+
 
   constructor(private store: Store<AppState>, private fb: FormBuilder,) { }
 
@@ -54,6 +58,13 @@ export class AppComponent implements OnInit {
   get timesheetType() {
     return this.timesheetEntryForm.get("timesheetType");
   }
+  get timesheetHourlyRate() {
+    return this.timesheetEntryForm.get("timesheetHourlyRate");
+  }
+  get timesheetDayTotal() {
+    return this.timesheetEntryForm.get("timesheetDayTotal");
+  }
+  
 
   onNewClick(event) {
     this.isNew= true;
@@ -61,12 +72,20 @@ export class AppComponent implements OnInit {
   }
   editTimesheetItem(event, timesheet){
     timesheet.isEdit = true;
+    // this.defaultType = timesheet.timesheetType;
+
+
+
+  }
+  onOptionsSelected(val, timesheet){
+    console.log(val);
+    timesheet.timesheetType = val;
 
 
   }
   updateTimesheetItem(event, timesheet){
     
-      const updatedTimesheetItem = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, isSubmit: false, isEdit: false, state: 'Active'   };
+      const updatedTimesheetItem = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, timesheetRate: timesheet.timesheetRate, timesheetDayTotal: timesheet.timesheetDayTotal, isSubmit: false, isEdit: false, state: 'Active'   };
     
       this.store.dispatch(new UpdateItemAction(updatedTimesheetItem));
       timesheet.isEdit = false;
@@ -85,30 +104,32 @@ export class AppComponent implements OnInit {
   this.newTimesheetItem.id = uuid();
   this.newTimesheetItem.timesheetTitle = this.timesheetEntryForm.value.timesheetTitle;
   this.newTimesheetItem.timesheetType = this.timesheetEntryForm.value.timesheetType;
+  this.newTimesheetItem.timesheetRate = this.timesheetEntryForm.value.timesheetHourlyRate;
+  this.newTimesheetItem.timesheetDayTotal = this.timesheetEntryForm.value.timesheetDayTotal;
   console.log('timesheetitem', this.newTimesheetItem);
 
     this.store.dispatch(new AddItemAction(this.newTimesheetItem));
 
-    this.newTimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false, state: 'Active'  };
+    this.newTimesheetItem = { id: '', name: '', timesheetTitle: '', timesheetType: '', timesheetRate: '', timesheetDayTotal: '', isSubmit: false, isEdit: false, state: 'Active'  };
     this.timesheetEntryForm.patchValue({ timesheetTitle: "" });
     this.timesheetEntryForm.patchValue({ timesheetType: "" });
     this.isNew=false;
 
   }
-  updateItem(id: string, name: string) {
-    const updatedTimesheetItem = { id: id, name: name, timesheetTitle: '', timesheetType: '' , isSubmit: false, isEdit: false, state: 'Active'   };
+  // updateItem(id: string, name: string) {
+  //   const updatedTimesheetItem = { id: id, name: name, timesheetTitle: '', timesheetType: '' , isSubmit: false, isEdit: false, state: 'Active'   };
     
-      this.store.dispatch(new UpdateItemAction(updatedTimesheetItem));
+  //     this.store.dispatch(new UpdateItemAction(updatedTimesheetItem));
   
-      //this.newTimesheetItem = { id: '', name: '' };
-    }
+  //     //this.newTimesheetItem = { id: '', name: '' };
+  //   }
 
   deleteItem(id: string) {
     this.store.dispatch(new DeleteItemAction(id));
   }
 
   editItem(id: string, name: string) {
-    this.newTimesheetItem = { id: id , name: name, timesheetTitle: '', timesheetType: '', isSubmit: false, isEdit: false , state: 'Active'   };
+    this.newTimesheetItem = { id: id , name: name, timesheetTitle: '', timesheetType: '', timesheetRate: '', timesheetDayTotal: '',  isSubmit: false, isEdit: false , state: 'Active'   };
   }
 
   onSelectedRow(timesheetItem) {
@@ -125,8 +146,8 @@ export class AppComponent implements OnInit {
 
   onItemSubmit(timesheet){
     if(this.selectedItem !=='') {
-      console.log('ready for submit');
-      const updatedTimesheetItemforSubmit = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, isSubmit: false, isEdit: false, state: 'Submitted'   };
+      console.log('ready for submit', timesheet);
+      const updatedTimesheetItemforSubmit = { id: timesheet.id, name: name, timesheetTitle: timesheet.timesheetTitle, timesheetType: timesheet.timesheetType, timesheetRate: timesheet.timesheetRate, timesheetDayTotal: timesheet.timesheetDayTotal, isSubmit: false, isEdit: false, state: 'Submitted'   };
       this.store.dispatch(new UpdateItemAction(updatedTimesheetItemforSubmit));
       timesheet.state = 'Submitted';
       this.selectedItem = '';

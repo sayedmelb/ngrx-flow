@@ -6,16 +6,18 @@
       </h2>
       <div class="pt-1 pb-1">
         <button (click)="onNewClick($event)" class="btn btn-success">New Entry</button>&nbsp;
-        <button (click)="onItemSubmit(itemforSubmit)" class="btn btn-success">Submit</button>
+        <button (click)="onItemSubmit(itemforSubmit)" class="btn btn-warning">Submit</button>
       </div>
       
      
         <table class="table table-hover back-style">
           <thead class="thead-dark">
             <tr>
-              <th><label id="lblTimesheetTitle">Title</label></th>
+              <th><label id="lblTimesheetState">State</label></th>
               <th> <label id="lblTimesheetTitle">Title</label></th>
               <th> <label id="lblTimesheetType">Type</label></th>
+              <th> <label id="lblTimesheetRate">Hourly rate</label></th>
+              <th> <label id="lblTimesheetTotal">Day total</label></th>
               <th> <label id="lblTimesheetType"></label></th>
             </tr>
           </thead>
@@ -38,21 +40,48 @@
                 id="timesheet-title"
                 aria-describedby="lblTimesheetTitle"
               /></td>
-              <td> <input
+              <td> 
+                <select formControlName="timesheetType">
+                  <!-- <option disabled>Select Task type</option> -->
+                  <option>Select</option>
+                  <option *ngFor="let tasktype of taskTypes">{{tasktype}}</option>
+                </select>
+                
+            </td>
+            <td>
+              <input
                 autocomplete="off"
-                class="card-input"
+                class="rate-input"
                 [ngClass]="{
                   'card-input-border-error':
-                  timesheetType.invalid &&
-                    (timesheetType.dirty || timesheetType.touched)
+                  timesheetHourlyRate.invalid &&
+                    (timesheetHourlyRate.dirty || timesheetHourlyRate.touched)
                 }"
                 type="text"
                 size="10"
-                formControlName="timesheetType"
-                [title]="'Enter Title/ description'"
+                formControlName="timesheetHourlyRate"
+                [title]="'Enter rate'"
                 id="timesheet-type"
-                aria-describedby="lblTimesheetType"
-              /></td>
+                aria-describedby="lblTimesheetRate"
+              />
+            </td>
+            <td>
+              <input
+                autocomplete="off"
+                class="rate-input"
+                [ngClass]="{
+                  'card-input-border-error':
+                  timesheetDayTotal.invalid &&
+                    (timesheetDayTotal.dirty || timesheetDayTotal.touched)
+                }"
+                type="text"
+                size="10"
+                formControlName="timesheetDayTotal"
+                [title]="'Total rate'"
+                id="timesheet-type"
+                aria-describedby="lblTimesheetTotal"
+              />
+            </td>
               <td><button type="button" (click)="addItem()"  class="btn btn-primary btn-add">Add</button> <button type="button" (click)="onCancel($event)" class="btn btn-secondary" >Cancel</button></td>
 
             </tr>
@@ -68,15 +97,33 @@
                     'card-input-readonly':
                     !timesheet.isEdit 
                   }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetTitle" />  </td>
-                  <td > <input [ngClass]="{
-                    'card-input-readonly':
-                    !timesheet.isEdit 
-                  }"  [readonly]="!timesheet.isEdit"  type="text" [(ngModel)]="timesheet.timesheetType" /> </td>
-                  <td>
+                  <td > 
+                    
+                    <select [ngClass]="{
+                      'card-input-readonly':
+                      !timesheet.isEdit 
+                    }"  [readonly]="!timesheet.isEdit"  #optSelect (change)='onOptionsSelected(optSelect.value, timesheet)'>
+                    
+                      <option [ngValue]="null" disabled>Select</option>
+                      <option [disabled]="!timesheet.isEdit" [ngValue]="timesheet.timesheetType"  [value]="tasktype" [selected]="tasktype===timesheet.timesheetType"  *ngFor="let tasktype of taskTypes">{{tasktype}}</option>
+                    </select>
+
+                </td>
+               
+                <td> <input class='rate-input' [ngClass]="{
+                  'card-input-readonly':
+                  !timesheet.isEdit 
+                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetRate" />  </td>
+                 
+                    <td> <input class='rate-input' [ngClass]="{
+                      'card-input-readonly':
+                      !timesheet.isEdit 
+                    }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetDayTotal" />  </td>
+                      <td>
                     <button *ngIf="!timesheet.isEdit && timesheet.state !=='Submitted'" type="button" (click)="editTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Edit</button> 
                     <button *ngIf="timesheet.isEdit  && timesheet.state !=='Submitted' " type="button" (click)="updateTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Update</button>
                  
-                    <button *ngIf=" timesheet.state !=='Submitted' " type="button" (click)="deleteItem(timesheet.id)" class="btn btn-warning" >Delete</button></td>
+                    <button *ngIf=" timesheet.state !=='Submitted' " type="button" (click)="deleteItem(timesheet.id)" class="btn btn-danger" >Delete</button></td>
 
                 </tr>
               </ng-template>

@@ -1,31 +1,15 @@
 {
   "timesheet": [
     {
-      "id": "7e87096c-545e-4feb-bce5-81513fdf0c41",
+      "id": "6ea5bae2-221c-4d65-abfc-52a025c6b7c1",
       "name": "",
-      "timesheetTitle": "dasda",
-      "timesheetType": "sdad",
+      "timesheetTitle": "sdfsdfsf dss",
+      "timesheetType": "Drafting document",
+      "timesheetRate": "44",
+      "timesheetDayTotal": "333",
       "isSubmit": false,
       "isEdit": false,
       "state": "Submitted"
-    },
-    {
-      "id": "90f4c0d5-9ced-4dfe-b488-c947c678a7f7",
-      "name": "",
-      "timesheetTitle": "gdgd",
-      "timesheetType": "sdfsf",
-      "isSubmit": false,
-      "isEdit": false,
-      "state": "Submitted"
-    },
-    {
-      "id": "c1f76670-cc4a-4f50-9bf6-0b89c8c12e41",
-      "name": "",
-      "timesheetTitle": "asdasd",
-      "timesheetType": "asdasd sdsasd",
-      "isSubmit": false,
-      "isEdit": false,
-      "state": "Active"
     }
   ]
 }

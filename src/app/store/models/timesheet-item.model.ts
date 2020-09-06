@@ -5,8 +5,9 @@ export interface TimesheetItem {
   timesheetType: string;
   // timesheetDate: string;
   // timesheetDuration: string;
-  // timesheetDayTotal: string;
-  // timesheetRate: string;
+  
+  timesheetRate: string;
+  timesheetDayTotal: string;
   isSubmit: boolean;
   isEdit: boolean;
   state: string;
