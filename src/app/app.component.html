@@ -1,251 +1,337 @@
 <div id="wrapper">
-  <div [class.loading]="(loading$ | async)" id="timesheet-list" *ngIf="!(error$ | async); else error">
+  <div
+    [class.loading]="loading$ | async"
+    id="timesheet-list"
+    *ngIf="!(error$ | async); else error"
+  >
     <div id="list">
-      <h2>
-        Timesheet List
-      </h2>
+      <h2>Timesheet List</h2>
       <div class="pt-1 pb-1">
-        <button (click)="onNewClick($event)" class="btn btn-success">New Entry</button>&nbsp;
-        <button (click)="onItemSubmit(itemforSubmit)" class="btn btn-warning">Submit</button>
+        <button (click)="onNewClick($event)" class="btn btn-success">
+          New Entry</button
+        >&nbsp;
+        <button (click)="onItemSubmit(itemforSubmit)" class="btn btn-warning">
+          Submit
+        </button>
       </div>
-      
-     
-        <table class="table table-hover back-style">
-          <thead class="thead-dark">
-            <tr>
-              <th><label id="lblTimesheetState">State</label></th>
-              <th> <label id="lblTimesheetDate">Date</label></th>
-              <th> <label id="lblTimesheetTitle">Title</label></th>
-              <th> <label id="lblTimesheetType">Type</label></th>
-              <th> <label id="lblTimesheetDuration">Duration</label></th>
-              <th> <label id="lblTimesheetRate">Hourly rate</label></th>
-              <th> <label id="lblTimesheetTotal">Day total</label></th>
-              <th> <label id="lblTimesheetAction"></label></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container [formGroup]="timesheetEntryForm">
+
+      <table class="table table-hover back-style">
+        <thead class="thead-dark">
+          <tr>
+            <th><label id="lblTimesheetState">State</label></th>
+            <th><label id="lblTimesheetDate">Date</label></th>
+            <th><label id="lblTimesheetTitle">Title</label></th>
+            <th><label id="lblTimesheetType">Type</label></th>
+            <th><label id="lblTimesheetDuration">Duration</label></th>
+            <th><label id="lblTimesheetRate">Hourly rate</label></th>
+            <th><label id="lblTimesheetTotal">Day total</label></th>
+            <th><label id="lblTimesheetAction"></label></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container [formGroup]="timesheetEntryForm">
             <tr *ngIf="isNew">
               <td></td>
 
-              <td > <input
-                autocomplete="off"
-                class="date-input"
-                [ngClass]="{
-                  'card-input-border-error':
-                  timesheetDate.invalid &&
-                    (timesheetDate.dirty || timesheetDate.touched)
-                }"
-                type="date"
-                size="10"
-                formControlName="timesheetDate"
-                [title]="'Enter date'"
-                id="timesheet-date"
-                aria-describedby="lblTimesheetDate"
-              /></td>
+              <td>
+                <input
+                  autocomplete="off"
+                  class="date-input"
+                  [ngClass]="{
+                    'card-input-border-error':
+                      timesheetDate.invalid &&
+                      (timesheetDate.dirty || timesheetDate.touched)
+                  }"
+                  type="date"
+                  size="10"
+                  formControlName="timesheetDate"
+                  [title]="'Enter date'"
+                  id="timesheet-date"
+                  aria-describedby="lblTimesheetDate"
+                />
+              </td>
 
-              <td > <input
-                autocomplete="off"
-                class="card-input"
-                [ngClass]="{
-                  'card-input-border-error':
-                  timesheetTitle.invalid &&
-                    (timesheetTitle.dirty || timesheetTitle.touched)
-                }"
-                type="text"
-                size="10"
-                formControlName="timesheetTitle"
-                [title]="'Enter Title/ description'"
-                id="timesheet-title"
-                aria-describedby="lblTimesheetTitle"
-              />
-              <br/>
-              <label class='red-mark'
-              *ngIf="timesheetTitle.touched && timesheetTitle.errors?.required" 
-              aria-describedby="lblValid"
-              id="lblValid"
-              >* Please enter title</label
-            >
-            </td>
-              <td> 
+              <td>
+                <input
+                  autocomplete="off"
+                  class="card-input"
+                  [ngClass]="{
+                    'card-input-border-error':
+                      timesheetTitle.invalid &&
+                      (timesheetTitle.dirty || timesheetTitle.touched)
+                  }"
+                  type="text"
+                  size="10"
+                  formControlName="timesheetTitle"
+                  [title]="'Enter Title/ description'"
+                  id="timesheet-title"
+                  aria-describedby="lblTimesheetTitle"
+                />
+                <br />
+                <label
+                  class="red-mark"
+                  *ngIf="
+                    timesheetTitle.touched && timesheetTitle.errors?.required
+                  "
+                  aria-describedby="lblValid"
+                  id="lblValid"
+                  >* Please enter title</label
+                >
+              </td>
+              <td>
                 <select formControlName="timesheetType">
                   <option>Select</option>
-                  <option *ngFor="let tasktype of taskTypes">{{tasktype}}</option>
-                </select><br/>
-                <label class='red-mark'
-                *ngIf="timesheetType.touched && timesheetType.errors?.required" 
-                aria-describedby="lblValidType"
-                id="lblValidType"
-                >* required selection</label
-              >
-            </td>
-            <td>
-              <input
-                autocomplete="off"
-                class="rate-input"
-                [ngClass]="{
-                  'card-input-border-error':
-                  timesheetDuration.invalid &&
-                    (timesheetDuration.dirty || timesheetDuration.touched)
-                }"
-                type="text"
-                size="10"
-                formControlName="timesheetDuration"
-                [title]="'Enter duration'"
-                id="timesheet-duration"
-                aria-describedby="lblTimesheetDuration"
-                (mouseout)="calculateRate($event)"
-                (focusout)= "calculateRate($event)"
-              />
-              <br/>
-              <label class='red-mark'
-              *ngIf="timesheetDuration.touched && timesheetDuration.errors?.pattern" 
-              aria-describedby="lblValidDuration"
-              id="lblValidDuration"
-              >* h:mm format</label
-            >
-            </td>
-            <td>
-              $
-              <input
-                autocomplete="off"
-                class="rate-input"
-                [ngClass]="{
-                  'card-input-border-error':
-                  timesheetHourlyRate.invalid &&
-                    (timesheetHourlyRate.dirty || timesheetHourlyRate.touched)
-                }"
-                type="text"
-                size="10"
-                formControlName="timesheetHourlyRate"
-                [title]="'Enter rate'"
-                id="timesheet-rate"
-                aria-describedby="lblTimesheetRate"
-                (mouseout)="calculateRate($event)"
-                (focusout)= "calculateRate($event)"
-              /> <br/>
-              <label class='red-mark'
-              *ngIf="timesheetHourlyRate.touched && timesheetHourlyRate.errors?.required" 
-              aria-describedby="lblValidRate"
-              id="lblValidRate"
-              >* required format</label
-            >
-            </td>
-            <td>
-              $
-              <input
-                [readonly]='true'
-                autocomplete="off"
-                class="rate-input"
-                [ngClass]="{
-                  'card-input-border-error':
-                  timesheetDayTotal.invalid &&
-                    (timesheetDayTotal.dirty || timesheetDayTotal.touched)
-                }"
-                type="text"
-                size="10"
-                formControlName="timesheetDayTotal"
-                [title]="'Total rate'"
-                id="timesheet-total"
-                aria-describedby="lblTimesheetTotal"
-              />
-            </td>
-              <td><button [disabled]="!timesheetEntryForm.valid " type="button" (click)="addItem()"  class="btn btn-primary btn-add">Add</button> <button type="button" (click)="onCancel($event)" class="btn btn-secondary" >Cancel</button></td>
-
+                  <option *ngFor="let tasktype of taskTypes">
+                    {{ tasktype }}
+                  </option></select
+                ><br />
+                <label
+                  class="red-mark"
+                  *ngIf="
+                    timesheetType.touched && timesheetType.errors?.required
+                  "
+                  aria-describedby="lblValidType"
+                  id="lblValidType"
+                  >* required selection</label
+                >
+              </td>
+              <td>
+                <input
+                  autocomplete="off"
+                  class="rate-input"
+                  [ngClass]="{
+                    'card-input-border-error':
+                      timesheetDuration.invalid &&
+                      (timesheetDuration.dirty || timesheetDuration.touched)
+                  }"
+                  type="text"
+                  size="10"
+                  formControlName="timesheetDuration"
+                  [title]="'Enter duration'"
+                  id="timesheet-duration"
+                  aria-describedby="lblTimesheetDuration"
+                  (mouseout)="calculateRate($event)"
+                  (focusout)="calculateRate($event)"
+                />
+                <br />
+                <label
+                  class="red-mark"
+                  *ngIf="
+                    timesheetDuration.touched &&
+                    timesheetDuration.errors?.pattern
+                  "
+                  aria-describedby="lblValidDuration"
+                  id="lblValidDuration"
+                  >* h:mm format</label
+                >
+              </td>
+              <td>
+                $
+                <input
+                  autocomplete="off"
+                  class="rate-input"
+                  [ngClass]="{
+                    'card-input-border-error':
+                      timesheetHourlyRate.invalid &&
+                      (timesheetHourlyRate.dirty || timesheetHourlyRate.touched)
+                  }"
+                  type="text"
+                  size="10"
+                  formControlName="timesheetHourlyRate"
+                  [title]="'Enter rate'"
+                  id="timesheet-rate"
+                  aria-describedby="lblTimesheetRate"
+                  (mouseout)="calculateRate($event)"
+                  (focusout)="calculateRate($event)"
+                />
+                <br />
+                <label
+                  class="red-mark"
+                  *ngIf="
+                    timesheetHourlyRate.touched &&
+                    timesheetHourlyRate.errors?.required
+                  "
+                  aria-describedby="lblValidRate"
+                  id="lblValidRate"
+                  >* required format</label
+                >
+              </td>
+              <td>
+                $
+                <input
+                  [readonly]="true"
+                  autocomplete="off"
+                  class="rate-input"
+                  [ngClass]="{
+                    'card-input-border-error':
+                      timesheetDayTotal.invalid &&
+                      (timesheetDayTotal.dirty || timesheetDayTotal.touched)
+                  }"
+                  type="text"
+                  size="10"
+                  formControlName="timesheetDayTotal"
+                  [title]="'Total rate'"
+                  id="timesheet-total"
+                  aria-describedby="lblTimesheetTotal"
+                />
+              </td>
+              <td>
+                <button
+                  [disabled]="!timesheetEntryForm.valid"
+                  type="button"
+                  (click)="addItem()"
+                  class="btn btn-primary btn-add"
+                >
+                  Add
+                </button>
+                <button
+                  type="button"
+                  (click)="onCancel($event)"
+                  class="btn btn-secondary"
+                >
+                  Cancel
+                </button>
+              </td>
             </tr>
-            </ng-container>
-            <ng-container *ngIf="(timesheetItems | async); else noItems" >
-              <ng-template ngFor let-timesheet [ngForOf]="timesheetItems | async">
-                <tr (click)="onSelectedRow(timesheet)" class="list-row " [ngClass]="{
-                  'selected-row':
-                  timesheet.id ===selectedItem, 'submitted-row': timesheet.state==='Submitted'
-                }" >
-                <td>{{timesheet.state}}</td>
+          </ng-container>
+          <ng-container *ngIf="timesheetItems | async; else noItems">
+            <ng-template ngFor let-timesheet [ngForOf]="timesheetItems | async">
+              <tr
+                (click)="onSelectedRow(timesheet)"
+                class="list-row"
+                [ngClass]="{
+                  'selected-row': timesheet.id === selectedItem,
+                  'submitted-row': timesheet.state === 'Submitted'
+                }"
+              >
+                <td>{{ timesheet.state }}</td>
 
-                <td> <input class='date-input' [ngClass]="{
-                  'card-input-readonly':
-                  !timesheet.isEdit 
-                }"  [readonly]="!timesheet.isEdit" type="date" [(ngModel)]="timesheet.timesheetDate" />  </td>
-               
-
-                  <td> <input [ngClass]="{
-                    'card-input-readonly':
-                    !timesheet.isEdit 
-                  }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetTitle" />  </td>
-                  <td > 
-                    
-                    <select [ngClass]="{
-                      'card-input-readonly':
-                      !timesheet.isEdit 
-                    }"    #optSelect (change)='onOptionsSelected(optSelect.value, timesheet)'>
-                    
-                      <option [ngValue]="null" disabled>Select</option>
-                      <option [disabled]="!timesheet.isEdit" [ngValue]="timesheet.timesheetType"  [value]="tasktype" [selected]="tasktype===timesheet.timesheetType"  *ngFor="let tasktype of taskTypes">{{tasktype}}</option>
-                    </select>
-
+                <td>
+                  <input
+                    class="date-input"
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    [readonly]="!timesheet.isEdit"
+                    type="date"
+                    [(ngModel)]="timesheet.timesheetDate"
+                  />
                 </td>
-                <td> <input class='rate-input' [ngClass]="{
-                  'card-input-readonly':
-                  !timesheet.isEdit 
-                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetDuration"
-                (mouseout)="calculateUpdatedRate($event,timesheet)"
-                (focusout)= "calculateUpdatedRate($event, timesheet)"
-                />  </td>
-                
-               
-                <td> $ <input class='rate-input' [ngClass]="{
-                  'card-input-readonly':
-                  !timesheet.isEdit 
-                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetRate"
-                (mouseout)="calculateUpdatedRate($event,timesheet)"
-                (focusout)= "calculateUpdatedRate($event, timesheet)"
-                />  </td>
-                 
-                    <td> $ <input class='rate-input' [ngClass]="{
-                      'card-input-readonly':
-                      !timesheet.isEdit 
-                    }"  [readonly]="true" type="text" [(ngModel)]="timesheet.timesheetDayTotal" />  </td>
-                      <td>
-                    <button *ngIf="!timesheet.isEdit && timesheet.state !=='Submitted'" type="button" (click)="editTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Edit</button> 
-                    <button *ngIf="timesheet.isEdit  && timesheet.state !=='Submitted' " type="button" (click)="updateTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Update</button>
-                 
-                    <button *ngIf=" timesheet.state !=='Submitted' " type="button" (click)="deleteItem(timesheet.id)" class="btn btn-danger" >Delete</button></td>
 
-                </tr>
-              </ng-template>
-            </ng-container>
-            
-       
-          </tbody>
-        </table>
-        
+                <td>
+                  <input
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    [readonly]="!timesheet.isEdit"
+                    type="text"
+                    [(ngModel)]="timesheet.timesheetTitle"
+                  />
+                </td>
+                <td>
+                  <select
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    #optSelect
+                    (change)="onOptionsSelected(optSelect.value, timesheet)"
+                  >
+                    <option [ngValue]="null" disabled>Select</option>
+                    <option
+                      [disabled]="!timesheet.isEdit"
+                      [ngValue]="timesheet.timesheetType"
+                      [value]="tasktype"
+                      [selected]="tasktype === timesheet.timesheetType"
+                      *ngFor="let tasktype of taskTypes"
+                    >
+                      {{ tasktype }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    class="rate-input"
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    [readonly]="!timesheet.isEdit"
+                    type="text"
+                    [(ngModel)]="timesheet.timesheetDuration"
+                    (mouseout)="calculateUpdatedRate($event, timesheet)"
+                    (focusout)="calculateUpdatedRate($event, timesheet)"
+                  />
+                </td>
 
-      <!-- </ng-container> -->
+                <td>
+                  $
+                  <input
+                    class="rate-input"
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    [readonly]="!timesheet.isEdit"
+                    type="text"
+                    [(ngModel)]="timesheet.timesheetRate"
+                    (mouseout)="calculateUpdatedRate($event, timesheet)"
+                    (focusout)="calculateUpdatedRate($event, timesheet)"
+                  />
+                </td>
 
-        <!-- <ul *ngIf="(timesheetItems | async); else noItems">
-          <li *ngFor="let timesheet of timesheetItems | async" >
-            <span>{{ timesheet.name }} | </span>
-            <span (click)="deleteItem(timesheet.id)">delete</span>
-            <span (click)="editItem(timesheet.id, timesheet.name)">Edit</span>
-          </li>
-        </ul> -->
+                <td>
+                  $
+                  <input
+                    class="rate-input"
+                    [ngClass]="{
+                      'card-input-readonly': !timesheet.isEdit
+                    }"
+                    [readonly]="true"
+                    type="text"
+                    [(ngModel)]="timesheet.timesheetDayTotal"
+                  />
+                </td>
+                <td>
+                  <button
+                    *ngIf="!timesheet.isEdit && timesheet.state !== 'Submitted'"
+                    type="button"
+                    (click)="editTimesheetItem($event, timesheet)"
+                    class="btn btn-primary btn-add"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    *ngIf="timesheet.isEdit && timesheet.state !== 'Submitted'"
+                    type="button"
+                    (click)="updateTimesheetItem($event, timesheet)"
+                    class="btn btn-primary btn-add"
+                  >
+                    Update
+                  </button>
 
+                  <button
+                    *ngIf="timesheet.state !== 'Submitted'"
+                    type="button"
+                    (click)="deleteItem(timesheet.id)"
+                    class="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-container>
+        </tbody>
+      </table>
       <ng-template #noItems>
         <ul>
-          <li style="max-width:250px;margin:0 auto;">No items found. Are you sure there's <em>nothing</em> you want?</li>
+          <li style="max-width: 250px; margin: 0 auto">
+            No items found. Are you sure there's <em>nothing</em> you want?
+          </li>
         </ul>
       </ng-template>
     </div>
-
-    <!-- <form (ngSubmit)="addItem()">
-      <input type="text" [(ngModel)]="newTimesheetItem.name" placeholder="Item" name="itemName"/>
-      <button type="submit" >Add</button>
-      <button type="button" (click)="updateItem(newTimesheetItem.id, newTimesheetItem.name)" >Update</button>
-    </form> -->
-   
   </div>
 </div>
 
 <ng-template #error>
-  <h2>{{(error$ | async)?.message}}</h2>
+  <h2>{{ (error$ | async)?.message }}</h2>
 </ng-template>
