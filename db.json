@@ -6,8 +6,9 @@
       "timesheetDate": "2020-09-06",
       "timesheetTitle": "morning meeting",
       "timesheetType": "Telephone Call",
+      "timesheetDuration": "1:11",
       "timesheetRate": "250.50",
-      "timesheetDayTotal": "34234",
+      "timesheetDayTotal": "313.13",
       "isSubmit": false,
       "isEdit": false,
       "state": "Active"
@@ -30,13 +31,13 @@
       "name": "",
       "timesheetDate": "2020-09-06",
       "timesheetTitle": "test34",
-      "timesheetType": null,
+      "timesheetType": "Telephone Call",
       "timesheetDuration": "4:34",
       "timesheetRate": "250.50",
-      "timesheetDayTotal": null,
+      "timesheetDayTotal": "1189.88",
       "isSubmit": false,
       "isEdit": false,
-      "state": "Active"
+      "state": "Submitted"
     },
     {
       "id": "1c936f51-03cc-463e-90ba-16ee75fd9133",
@@ -44,9 +45,22 @@
       "timesheetDate": "2020-09-06",
       "timesheetTitle": "ssada",
       "timesheetType": "Telephone Call",
-      "timesheetDuration": "2:34",
+      "timesheetDuration": "2:38",
       "timesheetRate": "250.50",
-      "timesheetDayTotal": null,
+      "timesheetDayTotal": "688.88",
+      "isSubmit": false,
+      "isEdit": false,
+      "state": "Active"
+    },
+    {
+      "id": "0b7d6a59-31ba-4990-9d42-cfb76c3ff2df",
+      "name": "",
+      "timesheetDate": "2020-09-06",
+      "timesheetTitle": "asdasd",
+      "timesheetType": "Telephone Call",
+      "timesheetDuration": "1:17",
+      "timesheetRate": "250.50",
+      "timesheetDayTotal": 375.75,
       "isSubmit": false,
       "isEdit": false,
       "state": "Active"

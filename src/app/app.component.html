@@ -94,6 +94,8 @@
                 [title]="'Enter duration'"
                 id="timesheet-duration"
                 aria-describedby="lblTimesheetDuration"
+                (mouseout)="calculateRate($event)"
+                (focusout)= "calculateRate($event)"
               />
               <br/>
               <label class='red-mark'
@@ -118,6 +120,8 @@
                 [title]="'Enter rate'"
                 id="timesheet-rate"
                 aria-describedby="lblTimesheetRate"
+                (mouseout)="calculateRate($event)"
+                (focusout)= "calculateRate($event)"
               /> <br/>
               <label class='red-mark'
               *ngIf="timesheetHourlyRate.touched && timesheetHourlyRate.errors?.required" 
@@ -128,6 +132,7 @@
             </td>
             <td>
               <input
+                [readonly]='true'
                 autocomplete="off"
                 class="rate-input"
                 [ngClass]="{
@@ -138,6 +143,7 @@
                 type="text"
                 size="10"
                 formControlName="timesheetDayTotal"
+                [value]="timesheetDayTotal | currency: 'USD':true:'1.0-2'"
                 [title]="'Total rate'"
                 id="timesheet-total"
                 aria-describedby="lblTimesheetTotal"
@@ -180,17 +186,24 @@
                 <td> <input class='rate-input' [ngClass]="{
                   'card-input-readonly':
                   !timesheet.isEdit 
-                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetDuration" />  </td>
+                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetDuration"
+                (mouseout)="calculateUpdatedRate($event,timesheet)"
+                (focusout)= "calculateUpdatedRate($event, timesheet)"
+                />  </td>
+                
                
                 <td> <input class='rate-input' [ngClass]="{
                   'card-input-readonly':
                   !timesheet.isEdit 
-                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetRate" />  </td>
+                }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetRate"
+                (mouseout)="calculateUpdatedRate($event,timesheet)"
+                (focusout)= "calculateUpdatedRate($event, timesheet)"
+                />  </td>
                  
                     <td> <input class='rate-input' [ngClass]="{
                       'card-input-readonly':
                       !timesheet.isEdit 
-                    }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetDayTotal" />  </td>
+                    }"  [readonly]="true" type="text" [(ngModel)]="timesheet.timesheetDayTotal" />  </td>
                       <td>
                     <button *ngIf="!timesheet.isEdit && timesheet.state !=='Submitted'" type="button" (click)="editTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Edit</button> 
                     <button *ngIf="timesheet.isEdit  && timesheet.state !=='Submitted' " type="button" (click)="updateTimesheetItem($event,timesheet)"  class="btn btn-primary btn-add">Update</button>
