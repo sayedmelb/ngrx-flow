@@ -4,7 +4,7 @@ export interface TimesheetItem {
   timesheetTitle: string;
   timesheetType: string;
    timesheetDate: string;
-  // timesheetDuration: string;
+   timesheetDuration: string;
   
   timesheetRate: string;
   timesheetDayTotal: string;

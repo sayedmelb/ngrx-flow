@@ -61,6 +61,7 @@ h2 {
 
 .card-input-border-error {
   border-color: #b81237; //color(tertiary,red);// #b81237;
+  border-width: 2px;
 }
 
 .btn-add {
@@ -87,6 +88,11 @@ h2 {
 }
 .date-input {
   width: 150px;
+}
+.red-mark {
+  color: red;
+  font-size: 16px;
+  margin-left: 0.3rem;
 }
 
 @media (max-width: 767px) {
