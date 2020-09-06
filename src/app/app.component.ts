@@ -98,7 +98,6 @@ export class AppComponent implements OnInit {
     // this.defaultType = timesheet.timesheetType;
   }
   onOptionsSelected(val, timesheet) {
-    console.log(val);
     timesheet.timesheetType = val;
   }
   updateTimesheetItem(event, timesheet) {
@@ -141,8 +140,7 @@ export class AppComponent implements OnInit {
     this.newTimesheetItem.timesheetDate = this.timesheetEntryForm.value.timesheetDate;
     this.newTimesheetItem.timesheetDuration = this.timesheetEntryForm.value.timesheetDuration;
 
-    console.log("timesheetitem", this.newTimesheetItem);
-
+    
     this.store.dispatch(new AddItemAction(this.newTimesheetItem));
 
     this.newTimesheetItem = {
@@ -206,7 +204,6 @@ export class AppComponent implements OnInit {
 
   onItemSubmit(timesheet) {
     if (this.selectedItem !== "") {
-      console.log("ready for submit", timesheet);
       const updatedTimesheetItemforSubmit = {
         id: timesheet.id,
         name: name,
@@ -227,7 +224,6 @@ export class AppComponent implements OnInit {
   }
 
   calculateRate(event) {
-    console.log("cal", event.target);
     if (this.timesheetEntryForm.valid) {
       let tot: number;
       tot = this.calculateTotal(
@@ -265,10 +261,7 @@ export class AppComponent implements OnInit {
     let roundedHours: number = fract + hours;
     let total: number = 0.0;
     total = roundedHours * parseFloat(rate);
-    console.log("total", total);
-
-    console.log(a[0]);
-    console.log(a[1]);
+   
     return total;
   }
 
