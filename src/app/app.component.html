@@ -106,6 +106,7 @@
             >
             </td>
             <td>
+              $
               <input
                 autocomplete="off"
                 class="rate-input"
@@ -131,6 +132,7 @@
             >
             </td>
             <td>
+              $
               <input
                 [readonly]='true'
                 autocomplete="off"
@@ -143,7 +145,6 @@
                 type="text"
                 size="10"
                 formControlName="timesheetDayTotal"
-                [value]="timesheetDayTotal | currency: 'USD':true:'1.0-2'"
                 [title]="'Total rate'"
                 id="timesheet-total"
                 aria-describedby="lblTimesheetTotal"
@@ -192,7 +193,7 @@
                 />  </td>
                 
                
-                <td> <input class='rate-input' [ngClass]="{
+                <td> $ <input class='rate-input' [ngClass]="{
                   'card-input-readonly':
                   !timesheet.isEdit 
                 }"  [readonly]="!timesheet.isEdit" type="text" [(ngModel)]="timesheet.timesheetRate"
@@ -200,7 +201,7 @@
                 (focusout)= "calculateUpdatedRate($event, timesheet)"
                 />  </td>
                  
-                    <td> <input class='rate-input' [ngClass]="{
+                    <td> $ <input class='rate-input' [ngClass]="{
                       'card-input-readonly':
                       !timesheet.isEdit 
                     }"  [readonly]="true" type="text" [(ngModel)]="timesheet.timesheetDayTotal" />  </td>

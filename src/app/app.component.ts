@@ -11,6 +11,8 @@ import {
   LoadTimesheetAction,
   UpdateItemAction,
 } from "./store/actions/timesheet.actions";
+import * as _ from "lodash";
+import orderBy from "lodash/orderBy";
 
 import {
   FormBuilder,
@@ -60,7 +62,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.timesheetEntryForm = getTimesheetEntryForm(this.fb);
     this.timesheetEntryForm.patchValue({ timesheetHourlyRate: "250.50" });
-    this.timesheetItems = this.store.select((store) => store.timesheet.list);
+    this.timesheetItems =this.store.select((store) => store.timesheet.list);
+  //  this.timesheetItems = this.store.select((store) => store.timesheetDate.list);
+   // this.timesheetItems = orderListing(tempList,'timesheetDate','desc')
     this.loading$ = this.store.select((store) => store.timesheet.loading);
     this.error$ = this.store.select((store) => store.timesheet.error);
 
@@ -121,6 +125,10 @@ export class AppComponent implements OnInit {
       timesheetTitle: "",
       timesheetType: "",
     });
+    this.timesheetEntryForm.patchValue({ timesheetDuration: "" });
+    this.timesheetEntryForm.patchValue({ timesheetDayTotal: "" });
+    this.timesheetEntryForm.patchValue({ timesheetHourlyRate: "250.50" });
+
     this.isNew = false;
   }
 
@@ -152,12 +160,23 @@ export class AppComponent implements OnInit {
     };
     this.timesheetEntryForm.patchValue({ timesheetTitle: "" });
     this.timesheetEntryForm.patchValue({ timesheetType: "" });
+    this.timesheetEntryForm.patchValue({ timesheetDuration: "" });
+    this.timesheetEntryForm.patchValue({ timesheetDayTotal: "" });
+    this.timesheetEntryForm.patchValue({ timesheetHourlyRate: "250.00" });
+
+    this.timesheetEntryForm.controls['timesheetTitle'].setErrors({'incorrect': false});
+    this.timesheetEntryForm.controls['timesheetTitle'].setErrors({});
+    
+    //this.timesheetEntryForm.valid
     this.isNew = false;
   }
   
 
   deleteItem(id: string) {
-    this.store.dispatch(new DeleteItemAction(id));
+    if(confirm("Are you sure you want to delete this timesheet entry? ")) {
+      this.store.dispatch(new DeleteItemAction(id));
+    }
+    
   }
 
   editItem(id: string, name: string) {
@@ -252,4 +271,12 @@ export class AppComponent implements OnInit {
     console.log(a[1]);
     return total;
   }
+
+
+  
+
+}
+
+export function orderListing(list: any, field, order) {
+  return orderBy(list, [(li) => li[field]], [order]);
 }
