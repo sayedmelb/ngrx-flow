@@ -14,6 +14,7 @@
           <thead class="thead-dark">
             <tr>
               <th><label id="lblTimesheetState">State</label></th>
+              <th> <label id="lblTimesheetDate">Date</label></th>
               <th> <label id="lblTimesheetTitle">Title</label></th>
               <th> <label id="lblTimesheetType">Type</label></th>
               <th> <label id="lblTimesheetRate">Hourly rate</label></th>
@@ -25,6 +26,23 @@
             <ng-container [formGroup]="timesheetEntryForm">
             <tr *ngIf="isNew">
               <td></td>
+
+              <td > <input
+                autocomplete="off"
+                class="card-input"
+                [ngClass]="{
+                  'card-input-border-error':
+                  timesheetDate.invalid &&
+                    (timesheetDate.dirty || timesheetDate.touched)
+                }"
+                type="date"
+                size="10"
+                formControlName="timesheetDate"
+                [title]="'Enter date'"
+                id="timesheet-date"
+                aria-describedby="lblTimesheetDate"
+              /></td>
+
               <td > <input
                 autocomplete="off"
                 class="card-input"
@@ -61,7 +79,7 @@
                 size="10"
                 formControlName="timesheetHourlyRate"
                 [title]="'Enter rate'"
-                id="timesheet-type"
+                id="timesheet-rate"
                 aria-describedby="lblTimesheetRate"
               />
             </td>
@@ -78,7 +96,7 @@
                 size="10"
                 formControlName="timesheetDayTotal"
                 [title]="'Total rate'"
-                id="timesheet-type"
+                id="timesheet-total"
                 aria-describedby="lblTimesheetTotal"
               />
             </td>
@@ -93,6 +111,13 @@
                   timesheet.id ===selectedItem, 'submitted-row': timesheet.state==='Submitted'
                 }" >
                 <td>{{timesheet.state}}</td>
+
+                <td> <input class='date-input' [ngClass]="{
+                  'card-input-readonly':
+                  !timesheet.isEdit 
+                }"  [readonly]="!timesheet.isEdit" type="date" [(ngModel)]="timesheet.timesheetDate" />  </td>
+               
+
                   <td> <input [ngClass]="{
                     'card-input-readonly':
                     !timesheet.isEdit 
@@ -102,7 +127,7 @@
                     <select [ngClass]="{
                       'card-input-readonly':
                       !timesheet.isEdit 
-                    }"  [readonly]="!timesheet.isEdit"  #optSelect (change)='onOptionsSelected(optSelect.value, timesheet)'>
+                    }"    #optSelect (change)='onOptionsSelected(optSelect.value, timesheet)'>
                     
                       <option [ngValue]="null" disabled>Select</option>
                       <option [disabled]="!timesheet.isEdit" [ngValue]="timesheet.timesheetType"  [value]="tasktype" [selected]="tasktype===timesheet.timesheetType"  *ngFor="let tasktype of taskTypes">{{tasktype}}</option>
